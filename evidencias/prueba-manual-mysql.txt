@@ -1,0 +1,40 @@
+### 1. GET /health
+{"servicio":"usuarios","estado":"OK","base_de_datos":"OK"} [HTTP 200]
+
+### 2. POST /api/v1/usuarios (registro)
+{"mensaje":"Usuario registrado correctamente","usuario":{"usuario_id":1,"nombre_completo":"Andrés Pérez","correo":"prueba1074@uniminuto.edu.co","nombre_usuario":"prueba1074","telefono":"3001234567","estado":"ACTIVO","fecha_registro":"2026-10-13T21:13:48.000Z"}} [HTTP 201]
+
+### 3. POST /api/v1/usuarios (el mismo usuario otra vez -> 409)
+{"error":{"codigo":"USUARIO_DUPLICADO","mensaje":"Ya existe un usuario con ese correo"}} [HTTP 409]
+
+### 4. POST /api/v1/auth/login
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibm9tYnJlX3VzdWFyaW8iOiJwcnVlYmExMDc0IiwiaWF0IjoxNzkxOTI2MDI4LCJleHAiOjE3OTE5MzMyMjgsImlzcyI6ImJvb2tzaGFyZS11c3VhcmlvcyJ9.-h4WPYkmt9ykCXvUCRtvawT86SoJv1NoXZj0oNHwHjo","tipo":"Bearer","expira_en":"2h","usuario":{"usuario_id":1,"nombre_completo":"Andrés Pérez","correo":"prueba1074@uniminuto.edu.co","nombre_usuario":"prueba1074","telefono":"3001234567","estado":"ACTIVO","fecha_registro":"2026-10-13T21:13:48.000Z"}}
+
+### 5. POST /api/v1/auth/validar (como lo llamaría Préstamos o Catálogo)
+{"valido":true,"usuario_id":1,"nombre_usuario":"prueba1074","expira":"2026-10-13T23:13:48.000Z"} [HTTP 200]
+
+### 6. GET /api/v1/usuarios/1
+{"usuario":{"usuario_id":1,"nombre_completo":"Andrés Pérez","correo":"prueba1074@uniminuto.edu.co","nombre_usuario":"prueba1074","telefono":"3001234567","estado":"ACTIVO","fecha_registro":"2026-10-13T21:13:48.000Z"}} [HTTP 200]
+
+### 7. GET /api/v1/usuarios/1/contacto
+{"contacto":{"usuario_id":1,"nombre_completo":"Andrés Pérez","correo":"prueba1074@uniminuto.edu.co","telefono":"3001234567"}} [HTTP 200]
+
+### 8. PUT /api/v1/usuarios/1
+{"mensaje":"Perfil actualizado correctamente","usuario":{"usuario_id":1,"nombre_completo":"Andrés Pérez","correo":"prueba1074@uniminuto.edu.co","nombre_usuario":"prueba1074","telefono":"3109998877","estado":"ACTIVO","fecha_registro":"2026-10-13T21:13:48.000Z"}} [HTTP 200]
+
+### 9. DELETE /api/v1/usuarios/1
+{"mensaje":"Cuenta eliminada correctamente"} [HTTP 200]
+
+### 10. POST /api/v1/auth/validar después de eliminar la cuenta
+{"valido":false} [HTTP 401]
+
+### 11. Concurrencia: 5 registros simultáneos del mismo usuario
+petición 2 -> HTTP 201
+petición 3 -> HTTP 409
+petición 4 -> HTTP 409
+petición 1 -> HTTP 409
+petición 5 -> HTTP 409
+
+### 12. Caída de la base de datos (MySQL detenido)
+{"servicio":"usuarios","estado":"DEGRADADO","base_de_datos":"NO_DISPONIBLE"} [HTTP 503]
+{"error":{"codigo":"SERVICIO_NO_DISPONIBLE","mensaje":"La base de datos de Usuarios no está disponible, intente más tarde"}} [HTTP 503]

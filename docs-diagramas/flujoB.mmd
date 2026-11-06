@@ -1,0 +1,33 @@
+sequenceDiagram
+    autonumber
+    actor E as Estudiante
+    participant F as Frontend
+    participant A as API
+    participant P as Préstamos
+    participant U as Usuarios
+    participant DB as BD Usuarios
+
+    rect rgb(227, 242, 253)
+    Note over E,DB: Operación B: Otro servicio valida el token (POST /api/v1/auth/validar)
+    E->>F: Solicita un préstamo de un libro
+    F->>A: POST /api/v1/prestamos (Authorization: Bearer token)
+    A->>P: Enruta a Préstamos
+    P->>U: POST /api/v1/auth/validar (Bearer token), timeout 3 s
+    U->>U: Verifica firma y vigencia del JWT
+    U->>DB: SELECT estado WHERE usuario_id = sub
+    DB-->>U: estado = ACTIVO
+    alt Token válido y cuenta activa
+        U-->>P: 200 {valido: true, usuario_id}
+        P->>P: Registra el préstamo a nombre de usuario_id
+        P-->>A: 201 Préstamo creado
+        A-->>F: 201
+    else Token inválido, expirado o cuenta eliminada
+        U-->>P: 401 {valido: false}
+        P-->>A: 401 No autorizado
+        A-->>F: 401 (redirige al login)
+    else Usuarios no responde o su BD está caída
+        U--xP: Sin respuesta / 503 SERVICIO_NO_DISPONIBLE
+        P-->>A: 503 (reintentar más tarde, no se crea el préstamo)
+        A-->>F: 503
+    end
+    end

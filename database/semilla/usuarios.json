@@ -1,0 +1,402 @@
+[
+  {
+    "nombre_completo": "Estudiante Demo BookShare",
+    "nombre_usuario": "demo.bookshare",
+    "correo": "demo.bookshare@uniminuto.edu.co",
+    "telefono": "3000000000",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-02-02 19:02:00",
+    "contrasena_hash": "$2b$10$/0pGa2mzqmjtQVxPpWHQAeCeKfL7/9w9hmcaHcEq/uoZTOtZSxmC2",
+    "usuario_id": 1
+  },
+  {
+    "nombre_completo": "Lina Beltrán Gómez",
+    "nombre_usuario": "lina.beltran",
+    "correo": "lina.beltran@uniminuto.edu.co",
+    "telefono": "3007474921",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-02-08 21:37:03",
+    "contrasena_hash": "$2b$10$snWCNTdxyhxi1/CRGHiLTuiTmxxloY4FUkD1Drr5y35bTX3AsFf.m",
+    "usuario_id": 2
+  },
+  {
+    "nombre_completo": "Sara Rodríguez Acosta",
+    "nombre_usuario": "sara.rodriguez",
+    "correo": "sara.rodriguez@uniminuto.edu.co",
+    "telefono": "3142654016",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-02-15 03:15:16",
+    "contrasena_hash": "$2b$10$3lr0rKVnUo6qWuQ2xyAOGuiIWAhRbm7RDBDt/fYPy1SmyPaLt/pvS",
+    "usuario_id": 3
+  },
+  {
+    "nombre_completo": "Julián Martínez Ortiz",
+    "nombre_usuario": "julian.martinez",
+    "correo": "julian.martinez@uniminuto.edu.co",
+    "telefono": null,
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-02-21 09:24:50",
+    "contrasena_hash": "$2b$10$73SzdH2y7WFtMnNmacv.w.YcvjYU.T0f4Yr6cDiksCFK4J/xFWiYm",
+    "usuario_id": 4
+  },
+  {
+    "nombre_completo": "Esteban Acosta Rodríguez",
+    "nombre_usuario": "esteban.acosta",
+    "correo": "esteban.acosta@uniminuto.edu.co",
+    "telefono": null,
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-02-27 19:47:47",
+    "contrasena_hash": "$2b$10$hS2sm/N.V4RcgcDantZ.d.7cPsGVhxMct5795FN0UnGk2epcxYEVK",
+    "usuario_id": 5
+  },
+  {
+    "nombre_completo": "Luisa Fernanda Gómez Ramírez",
+    "nombre_usuario": "luisa.gomez",
+    "correo": "luisa.gomez@uniminuto.edu.co",
+    "telefono": "3133277747",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-03-05 21:13:02",
+    "contrasena_hash": "$2b$10$f8eZggLAOs6/ofoNy1wu2.EG9YOxXso0Dt2yEh/YB9NQZ07goy96m",
+    "usuario_id": 6
+  },
+  {
+    "nombre_completo": "Valentina Cárdenas Castro",
+    "nombre_usuario": "valentina.cardenas",
+    "correo": "valentina.cardenas@uniminuto.edu.co",
+    "telefono": null,
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-03-12 09:34:19",
+    "contrasena_hash": "$2b$10$ocT5FV9THcxFlrxU45aU3.IHYsBmhQp/8O.FiJGxYskYzqzatjiwS",
+    "usuario_id": 7
+  },
+  {
+    "nombre_completo": "Cristian Martínez Acosta",
+    "nombre_usuario": "cristian.martinez",
+    "correo": "cristian.martinez@uniminuto.edu.co",
+    "telefono": "3194909768",
+    "estado": "INACTIVO",
+    "fecha_registro": "2026-03-18 09:29:42",
+    "contrasena_hash": "$2b$10$ZJTAHCxG3HYKQiIBCrlKWOorxur44nrsf13Sw36.zgy7DLtfLxHu6",
+    "usuario_id": 8
+  },
+  {
+    "nombre_completo": "Laura Ortiz Acosta",
+    "nombre_usuario": "laura.ortiz",
+    "correo": "laura.ortiz@uniminuto.edu.co",
+    "telefono": "3130731988",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-03-24 18:52:40",
+    "contrasena_hash": "$2b$10$cNR8hcRBp0IDlrUaALmzzuLkrNbdhBtKEOHDt6Fu39/L3q1okdhxK",
+    "usuario_id": 9
+  },
+  {
+    "nombre_completo": "Paula Moreno Cárdenas",
+    "nombre_usuario": "paula.moreno",
+    "correo": "paula.moreno@uniminuto.edu.co",
+    "telefono": "3196750514",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-03-30 21:40:31",
+    "contrasena_hash": "$2b$10$tWP4gjocbLjaEBmoDkeUdeAm2.J3kRb4/5VKog1qAa2QjTTw0.tU6",
+    "usuario_id": 10
+  },
+  {
+    "nombre_completo": "Santiago Torres Cifuentes",
+    "nombre_usuario": "santiago.torres",
+    "correo": "santiago.torres@uniminuto.edu.co",
+    "telefono": "3188227802",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-04-06 07:44:18",
+    "contrasena_hash": "$2b$10$SbXvgscGQnZgdaEgTYAkfeSGKy4UggGwZwD1G2Mx6QjHiLoEy8Si2",
+    "usuario_id": 11
+  },
+  {
+    "nombre_completo": "Cristian Beltrán Ospina",
+    "nombre_usuario": "cristian.beltran",
+    "correo": "cristian.beltran@uniminuto.edu.co",
+    "telefono": "3019745616",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-04-12 10:46:35",
+    "contrasena_hash": "$2b$10$GnpkdbrqJNYA5pGAAZeVauXjiI0EBar0RMMEWZrABtIFvdVt0lFra",
+    "usuario_id": 12
+  },
+  {
+    "nombre_completo": "Julián Suárez Galindo",
+    "nombre_usuario": "julian.suarez",
+    "correo": "julian.suarez@uniminuto.edu.co",
+    "telefono": "3110132999",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-04-18 17:44:44",
+    "contrasena_hash": "$2b$10$OvvgPjyH2Vg9fAm6rbiWsuodGG4iFTd7/T87zOjNQzqB7gXXMgabC",
+    "usuario_id": 13
+  },
+  {
+    "nombre_completo": "Brayan López Muñoz",
+    "nombre_usuario": "brayan.lopez",
+    "correo": "brayan.lopez@uniminuto.edu.co",
+    "telefono": "3198364996",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-04-24 23:52:53",
+    "contrasena_hash": "$2b$10$Iqy5qkkj6IzRBg4qhfx7POcjo/AcZzSS.QcmHmhzpKiklwWo4IBVG",
+    "usuario_id": 14
+  },
+  {
+    "nombre_completo": "Luisa Fernanda Zambrano Cárdenas",
+    "nombre_usuario": "luisa.zambrano",
+    "correo": "luisa.zambrano@uniminuto.edu.co",
+    "telefono": null,
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-05-01 10:07:28",
+    "contrasena_hash": "$2b$10$R9volbgprnutEoHCyOQY4utzWY./SMl4XEyy7bSHFn/i7C1IuS3gm",
+    "usuario_id": 15
+  },
+  {
+    "nombre_completo": "Yuliana Ortiz Pineda",
+    "nombre_usuario": "yuliana.ortiz",
+    "correo": "yuliana.ortiz@uniminuto.edu.co",
+    "telefono": "3207035205",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-05-07 12:49:37",
+    "contrasena_hash": "$2b$10$IuTDyNdlY9FHGH83UWO74OVX/gzapfqoOkG4L6e3MOLAV.vTAawsC",
+    "usuario_id": 16
+  },
+  {
+    "nombre_completo": "Isabella Hernández Ospina",
+    "nombre_usuario": "isabella.hernandez",
+    "correo": "isabella.hernandez@uniminuto.edu.co",
+    "telefono": "3009887055",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-05-13 17:52:05",
+    "contrasena_hash": "$2b$10$nZz76ZoiSXArfFdnpJrov.dmo4DVtx5ByBktpi34kIVg36txFRRXG",
+    "usuario_id": 17
+  },
+  {
+    "nombre_completo": "Andrés Felipe Galindo Cárdenas",
+    "nombre_usuario": "andres.galindo",
+    "correo": "andres.galindo@uniminuto.edu.co",
+    "telefono": "3213376402",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-05-20 01:33:19",
+    "contrasena_hash": "$2b$10$xr1Zn3.Yl5mJyS5E967q3eWCPhb8KOgMrLKj8la9VoMxqKd8BEhRm",
+    "usuario_id": 18
+  },
+  {
+    "nombre_completo": "David González Pineda",
+    "nombre_usuario": "david.gonzalez",
+    "correo": "david.gonzalez@uniminuto.edu.co",
+    "telefono": "3008466331",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-05-26 12:17:38",
+    "contrasena_hash": "$2b$10$mZiMeqrCvQHUinfmkKXfpO9fu4EK4A/80ULiWL67NQIJICmKKVDQy",
+    "usuario_id": 19
+  },
+  {
+    "nombre_completo": "Andrés Felipe Moreno Ortiz",
+    "nombre_usuario": "andres.moreno",
+    "correo": "andres.moreno@uniminuto.edu.co",
+    "telefono": "3121231549",
+    "estado": "INACTIVO",
+    "fecha_registro": "2026-06-01 18:18:04",
+    "contrasena_hash": "$2b$10$6xGClgZAdAX3EhxRUrF76OqN6sBC2aa8VhJVEwgV3PbjPlB9Fur2W",
+    "usuario_id": 20
+  },
+  {
+    "nombre_completo": "Diego Vargas Bermúdez",
+    "nombre_usuario": "diego.vargas",
+    "correo": "diego.vargas@uniminuto.edu.co",
+    "telefono": "3509387111",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-06-08 01:41:31",
+    "contrasena_hash": "$2b$10$2Rn0d3XC3lyNtWR8v/WQyuSjvbvsOD6sJRrWhuRiQz29BXRHRYHnS",
+    "usuario_id": 21
+  },
+  {
+    "nombre_completo": "Mariana Patiño Rincón",
+    "nombre_usuario": "mariana.patino",
+    "correo": "mariana.patino@uniminuto.edu.co",
+    "telefono": "3196080082",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-06-14 06:22:11",
+    "contrasena_hash": "$2b$10$lUobOjX9Ru4b4Lc7abTCNuRfz88KeTjUh1cJTHrVHkFTBkghlVyGe",
+    "usuario_id": 22
+  },
+  {
+    "nombre_completo": "Mariana Zambrano Díaz",
+    "nombre_usuario": "mariana.zambrano",
+    "correo": "mariana.zambrano@uniminuto.edu.co",
+    "telefono": "3130922228",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-06-20 10:58:21",
+    "contrasena_hash": "$2b$10$9qfhO9tL6OK40Mb3erKJaeIzv2mrKJuQeTUygyfa9kwxNyKHt35cK",
+    "usuario_id": 23
+  },
+  {
+    "nombre_completo": "Juliana Galindo Díaz",
+    "nombre_usuario": "juliana.galindo",
+    "correo": "juliana.galindo@uniminuto.edu.co",
+    "telefono": "3206856831",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-06-26 13:05:13",
+    "contrasena_hash": "$2b$10$naB725xsDM2UOzRt5M6jqOZauJtHpKMOwXl.NF3IGILV3HzAPyUhi",
+    "usuario_id": 24
+  },
+  {
+    "nombre_completo": "Paula Cifuentes González",
+    "nombre_usuario": "paula.cifuentes",
+    "correo": "paula.cifuentes@uniminuto.edu.co",
+    "telefono": "3137561203",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-07-02 23:03:35",
+    "contrasena_hash": "$2b$10$.rH1NL3eA9Q3And1RJFupecGxqYT/eNDr36nMgMQs3CvVH1tQxIIm",
+    "usuario_id": 25
+  },
+  {
+    "nombre_completo": "Ana María Ortiz Castro",
+    "nombre_usuario": "ana.ortiz",
+    "correo": "ana.ortiz@uniminuto.edu.co",
+    "telefono": "3503390204",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-07-09 09:03:07",
+    "contrasena_hash": "$2b$10$Nppx6OqBTwq3jFtBGF/1vOYPy3xQaqVwv/3Ad9MvykX3lYrYMe8SS",
+    "usuario_id": 26
+  },
+  {
+    "nombre_completo": "Mateo Pérez Cifuentes",
+    "nombre_usuario": "mateo.perez",
+    "correo": "mateo.perez@uniminuto.edu.co",
+    "telefono": "3219634479",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-07-15 08:41:57",
+    "contrasena_hash": "$2b$10$8UurJwaktVy0TXeH45SH4.VOp2TXOTWfjGEjlsQjP3kXytjSmAc6O",
+    "usuario_id": 27
+  },
+  {
+    "nombre_completo": "Brayan Ramírez Acosta",
+    "nombre_usuario": "brayan.ramirez",
+    "correo": "brayan.ramirez@uniminuto.edu.co",
+    "telefono": "3176468338",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-07-21 15:11:40",
+    "contrasena_hash": "$2b$10$0HQzF/f/D.5o/wDQoe6DkO7fCScoplu.v/QlADRl5ykqRHbprSvBO",
+    "usuario_id": 28
+  },
+  {
+    "nombre_completo": "Diego Patiño Rincón",
+    "nombre_usuario": "diego.patino",
+    "correo": "diego.patino@uniminuto.edu.co",
+    "telefono": "3191306366",
+    "estado": "INACTIVO",
+    "fecha_registro": "2026-07-28 03:53:16",
+    "contrasena_hash": "$2b$10$OTJMiSJlwOSbiv84VL4TMu9Vf8MGEWHwzYETo7m4p2mqDM4iYJuce",
+    "usuario_id": 29
+  },
+  {
+    "nombre_completo": "Camila Rodríguez Pérez",
+    "nombre_usuario": "camila.rodriguez",
+    "correo": "camila.rodriguez@uniminuto.edu.co",
+    "telefono": "3116144526",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-08-03 09:58:45",
+    "contrasena_hash": "$2b$10$z8Oji2MS2QMGsOIDBIwYpeYh7lvN3idGhjLDhOIOeId/f5q/vHEfe",
+    "usuario_id": 30
+  },
+  {
+    "nombre_completo": "Yuliana Martínez Quintero",
+    "nombre_usuario": "yuliana.martinez",
+    "correo": "yuliana.martinez@uniminuto.edu.co",
+    "telefono": "3158619619",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-08-09 13:24:04",
+    "contrasena_hash": "$2b$10$J4Ev0VKFu2xTo2H3PYKIvOeAA7aiwju6XIM0/9R6nTxukouKDm4DG",
+    "usuario_id": 31
+  },
+  {
+    "nombre_completo": "David Hernández Pérez",
+    "nombre_usuario": "david.hernandez",
+    "correo": "david.hernandez@uniminuto.edu.co",
+    "telefono": "3121765155",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-08-15 15:26:25",
+    "contrasena_hash": "$2b$10$73zXYnHVXPrqr5izHC/THeN7uCm/Eif6p6IQwe6QG541CSuaIVXRi",
+    "usuario_id": 32
+  },
+  {
+    "nombre_completo": "Luisa Fernanda Acosta Muñoz",
+    "nombre_usuario": "luisa.acosta",
+    "correo": "luisa.acosta@uniminuto.edu.co",
+    "telefono": "3160014476",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-08-21 23:41:22",
+    "contrasena_hash": "$2b$10$EM9gunUHIYyIo8JfDxr4DOMLLgiIbdfv8Jt9jMjHS6Pmb.MKn737K",
+    "usuario_id": 33
+  },
+  {
+    "nombre_completo": "Juan Pablo Pineda Quintero",
+    "nombre_usuario": "juan.pineda",
+    "correo": "juan.pineda@uniminuto.edu.co",
+    "telefono": "3506652474",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-08-28 07:48:37",
+    "contrasena_hash": "$2b$10$gyOi/crcQxAZCxTDZIYijO./8b2yBA4ls69GVeusJUV6bSuETfK/6",
+    "usuario_id": 34
+  },
+  {
+    "nombre_completo": "Miguel Ángel Muñoz Ramírez",
+    "nombre_usuario": "miguel.munoz",
+    "correo": "miguel.munoz@uniminuto.edu.co",
+    "telefono": "3119881615",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-09-03 09:30:56",
+    "contrasena_hash": "$2b$10$JXwelh7ld5MviCcUSWV48uE6SPrqTYy0QS1r5.evcBmLdoygih7Q2",
+    "usuario_id": 35
+  },
+  {
+    "nombre_completo": "Samuel Salazar Acosta",
+    "nombre_usuario": "samuel.salazar",
+    "correo": "samuel.salazar@uniminuto.edu.co",
+    "telefono": "3121710305",
+    "estado": "INACTIVO",
+    "fecha_registro": "2026-09-09 20:23:16",
+    "contrasena_hash": "$2b$10$0/YQfzIdAMK9O4IAhhVSjO2x6IoJoUsQX9u3WqaUZI4BzdQdyErwK",
+    "usuario_id": 36
+  },
+  {
+    "nombre_completo": "Manuela Suárez Rodríguez",
+    "nombre_usuario": "manuela.suarez",
+    "correo": "manuela.suarez@uniminuto.edu.co",
+    "telefono": "3190410215",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-09-16 03:08:23",
+    "contrasena_hash": "$2b$10$jUERWryrAKqIfY3T.vQHfOf17iNtaZ1S8xzfhQ69GoQOrDfBcCYr2",
+    "usuario_id": 37
+  },
+  {
+    "nombre_completo": "Diego Martínez Torres",
+    "nombre_usuario": "diego.martinez",
+    "correo": "diego.martinez@uniminuto.edu.co",
+    "telefono": "3008117059",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-09-22 06:47:39",
+    "contrasena_hash": "$2b$10$NpGFTk.dr9ayb8n/5gc2H.esqNPVHe56QyZ/GfJpceQUCmxgTXFyu",
+    "usuario_id": 38
+  },
+  {
+    "nombre_completo": "Jhon Fredy Bermúdez González",
+    "nombre_usuario": "jhon.bermudez",
+    "correo": "jhon.bermudez@uniminuto.edu.co",
+    "telefono": "3104502325",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-09-28 11:45:09",
+    "contrasena_hash": "$2b$10$ilxWEFqE9G/ObQ5GXho0JuqP3T7Ew3oBexHZuCy37d4RbOQakjGyC",
+    "usuario_id": 39
+  },
+  {
+    "nombre_completo": "Kevin López Rodríguez",
+    "nombre_usuario": "kevin.lopez",
+    "correo": "kevin.lopez@uniminuto.edu.co",
+    "telefono": "3003559236",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-10-04 23:08:10",
+    "contrasena_hash": "$2b$10$ZZ5lkdi2hmK8hNqPqOwP7O2XWDXMtO6FGfK7wCyQoFCv7eIX250dO",
+    "usuario_id": 40
+  }
+]

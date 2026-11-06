@@ -1,0 +1,45 @@
+digraph G {
+  rankdir=TB; nodesep=0.4; ranksep=0.45; bgcolor="white"; compound=true;
+  node [fontname="Helvetica", fontsize=11, style="filled,rounded", shape=box, color="#555555"];
+  edge [fontname="Helvetica", fontsize=10, color="#555555"];
+
+  cli [label="Clientes: API / Frontend · Catálogo · Solicitudes · Préstamos · Valoraciones · Chat · Almacenamiento\n(peticiones HTTP/REST + JSON)", shape=box, style="rounded", fillcolor=white];
+
+  subgraph cluster_ms {
+    label="Microservicio USUARIOS  (Node.js + Express, puerto 3001)"; fontname="Helvetica-Bold"; fontsize=13;
+    style="rounded"; color="#2E7D32"; penwidth=2;
+
+    subgraph cluster_p {
+      label="1. Capa de presentación / API"; fontname="Helvetica-Bold"; style="rounded,filled"; fillcolor="#E3F2FD"; color="#90CAF9";
+      rutas [label="Rutas (routes/index.js)\n7 endpoints del contrato /api/v1/...", fillcolor=white];
+      mw [label="Middlewares\nrequiereToken · soloPropietario\nmanejador de errores", fillcolor=white];
+      ctrl [label="Controladores\nregistro · auth (login, validar) · perfil", fillcolor=white];
+      rutas -> mw -> ctrl;
+    }
+    subgraph cluster_n {
+      label="2. Capa de lógica de negocio"; fontname="Helvetica-Bold"; style="rounded,filled"; fillcolor="#FFF8E1"; color="#FFE082";
+      valid [label="Validaciones\ncampos, correo institucional,\ncontraseña segura", fillcolor=white];
+      susu [label="UsuariosService\nregistrar · consultar · contacto\nactualizar · eliminar (lógico)", fillcolor=white];
+      sauth [label="AuthService\nlogin · validarToken", fillcolor=white];
+    }
+    subgraph cluster_s { label="Seguridad"; fontname="Helvetica-Bold"; style="rounded,filled"; fillcolor="#FCE4EC"; color="#F48FB1";
+    seg [label="Módulo de seguridad\nbcrypt (hash de contraseñas)\nJWT (firmar / verificar tokens)", fillcolor=white]; }
+    subgraph cluster_d {
+      label="3. Capa de acceso a datos"; fontname="Helvetica-Bold"; style="rounded,filled"; fillcolor="#E8F5E9"; color="#A5D6A7";
+      repo [label="UsuariosRepository\ncrear · buscarPorId · buscarPorNombreUsuario\nactualizar · desactivar · ping", fillcolor=white];
+      pool [label="Pool de conexiones mysql2\n(timeout, UTC)", fillcolor=white];
+      repo -> pool;
+    }
+    ctrl -> valid; ctrl -> susu; ctrl -> sauth;
+    sauth -> susu [style=dashed, label=" perfil"];
+    susu -> seg [style=dashed]; sauth -> seg [style=dashed];
+    susu -> repo; sauth -> repo;
+
+  }
+  db [label="BD MySQL propia\nbookshare_usuarios.usuarios\n(UNIQUE correo, UNIQUE nombre_usuario)", shape=cylinder, style=filled, fillcolor="#C8E6C9"];
+  cfg [label="Configuración (.env)\npuerto, BD, JWT_SECRET,\ndominio institucional", shape=note, style=filled, fillcolor="#F5F5F5", fontsize=10];
+
+  cli -> rutas [lhead=cluster_p, penwidth=1.5];
+  pool -> db [penwidth=1.5, label=" SQL"];
+  cfg -> seg [style=dotted, arrowhead=none]; 
+}

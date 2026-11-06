@@ -1,0 +1,28 @@
+sequenceDiagram
+    autonumber
+    actor E as Estudiante
+    participant F as Frontend
+    participant A as API
+    participant U as Usuarios
+    participant DB as BD Usuarios
+
+    rect rgb(232, 245, 233)
+    Note over E,DB: Operación A: Iniciar sesión (POST /api/v1/auth/login)
+    E->>F: Ingresa nombre de usuario y contraseña
+    F->>A: POST /api/v1/auth/login {nombreUsuario, Contraseña}
+    A->>U: Reenvía la petición
+    U->>U: Valida campos obligatorios
+    U->>DB: SELECT usuario por nombre_usuario
+    DB-->>U: Registro con contrasena_hash y estado
+    U->>U: bcrypt.compare(contraseña, hash) y verifica estado ACTIVO
+    alt Credenciales correctas
+        U->>U: Firma JWT (sub = usuario_id, expira en 2h)
+        U-->>A: 200 {token, tipo: Bearer, usuario}
+        A-->>F: 200 + token
+        F->>F: Guarda el token para las siguientes peticiones
+    else Usuario o contraseña incorrectos
+        U-->>A: 401 CREDENCIALES_INVALIDAS
+        A-->>F: 401 (muestra "usuario o contraseña incorrectos")
+    end
+    end
+

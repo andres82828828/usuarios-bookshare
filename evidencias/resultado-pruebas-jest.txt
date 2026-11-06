@@ -1,0 +1,42 @@
+> bookshare-usuarios-service@1.0.0 test
+> jest --runInBand
+
+PASS tests/usuarios.test.js
+  POST /api/v1/usuarios — Registrar usuario
+    ✓ 201: registra y no devuelve la contraseña (66 ms)
+    ✓ 400: datos incompletos o inválidos (8 ms)
+    ✓ 400: rechaza correos no institucionales (5 ms)
+    ✓ 409: nombre de usuario o correo duplicado (12 ms)
+    ✓ Concurrencia: dos registros simultáneos con el mismo usuario → solo uno se crea (13 ms)
+    ✓ 400: JSON mal formado (8 ms)
+  POST /api/v1/auth/login — Iniciar sesión
+    ✓ 200: devuelve token JWT y datos básicos (19 ms)
+    ✓ 401: contraseña incorrecta o usuario inexistente (mismo mensaje) (14 ms)
+    ✓ 400: faltan credenciales (4 ms)
+  POST /api/v1/auth/validar — Validar token (usado por otros servicios)
+    ✓ 200: token válido devuelve valido=true y usuario_id (14 ms)
+    ✓ También acepta el token en el body (13 ms)
+    ✓ 401: token alterado (13 ms)
+    ✓ 401: token expirado (13 ms)
+    ✓ 401: token de una cuenta ya eliminada (20 ms)
+    ✓ 401: sin token (3 ms)
+  GET /api/v1/usuarios/{id} y /contacto
+    ✓ 200: consultar perfil con token (12 ms)
+    ✓ 200: consultar contacto (solo datos de contacto) (13 ms)
+    ✓ 401: sin token (2 ms)
+    ✓ 404: usuario inexistente (10 ms)
+    ✓ 400: id no numérico (10 ms)
+  PUT /api/v1/usuarios/{id} — Actualizar perfil
+    ✓ 200: actualiza el teléfono propio (11 ms)
+    ✓ 200: cambiar contraseña permite login con la nueva (22 ms)
+    ✓ 403: no puede modificar el perfil de otro usuario (24 ms)
+    ✓ 400: no se permite cambiar el nombre de usuario (18 ms)
+  DELETE /api/v1/usuarios/{id} — Eliminar cuenta
+    ✓ 200: elimina (lógicamente) y luego el perfil da 404 y el login da 403 (34 ms)
+  Fallos de la base de datos y rutas
+    ✓ 503: si la base de datos no responde, el servicio informa en vez de caerse (10 ms)
+    ✓ 200: /health con base de datos disponible (4 ms)
+    ✓ 404: ruta inexistente (3 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       28 passed, 28 total

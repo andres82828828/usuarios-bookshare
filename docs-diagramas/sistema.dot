@@ -1,0 +1,44 @@
+digraph G {
+  rankdir=TB; nodesep=0.3; ranksep=0.65; bgcolor="white"; newrank=true;
+  node [fontname="Helvetica", fontsize=12, style="filled,rounded", shape=box, color="#555555", penwidth=1.2];
+  edge [fontname="Helvetica", fontsize=10, color="#555555"];
+
+  est [label="Estudiante (navegador / app)", shape=ellipse, fillcolor="#FFFFFF"];
+  front [label="Frontend BookShare\n(interfaz web / app, sin lógica de negocio)", fillcolor="#E3F2FD"];
+  api [label="API: punto de entrada único\nrecibe /api/v1/... y enruta al microservicio dueño", fillcolor="#FFF3E0", penwidth=2];
+
+  cat  [label="Catálogo", fillcolor="#F5F5F5"];
+  bus  [label="Búsqueda", fillcolor="#F5F5F5"];
+  sol  [label="Solicitudes /\nReservas", fillcolor="#F5F5F5"];
+  pre  [label="Préstamos /\nDevoluciones", fillcolor="#F5F5F5"];
+  val  [label="Valoraciones", fillcolor="#F5F5F5"];
+  chat [label="Chat", fillcolor="#F5F5F5"];
+  alm  [label="Almacenamiento\n(imágenes, archivos)", fillcolor="#F5F5F5"];
+
+  usu  [label="USUARIOS (servicio base)\nregistro · login · validación de tokens · perfiles\n[servicio de nuestro equipo]", fillcolor="#C8E6C9", penwidth=2.5, color="#2E7D32", fontsize=13];
+
+  node [shape=cylinder, style=filled, fillcolor="#ECEFF1", fontsize=10];
+  dbc [label="BD\ncatálogo"]; dbs [label="BD\nsolicitudes"]; dbp [label="BD\npréstamos"];
+  dbv [label="BD\nvaloraciones"]; dbch [label="BD\nchat"]; dba [label="Archivos"];
+  dbu [label="BD MySQL\nusuarios", fillcolor="#C8E6C9"];
+
+  est -> front -> api [penwidth=1.5];
+  api -> cat; api -> bus; api -> sol; api -> pre; api -> val; api -> chat; api -> alm;
+  api -> usu [penwidth=1.8, label="  registro / login / perfil", fontcolor="#333333"];
+  bus -> cat [label="consulta", style=dashed, constraint=false];
+
+  edge [arrowhead=none, color="#888888"];
+  cat -> dbc; sol -> dbs; pre -> dbp; val -> dbv; chat -> dbch; alm -> dba;
+  usu -> dbu [penwidth=1.5];
+
+  edge [arrowhead=normal, color="#2E7D32", style=dashed, penwidth=1.3];
+  dbc -> usu [style=invis]; 
+  cat -> usu; sol -> usu; pre -> usu; val -> usu; chat -> usu; alm -> usu;
+
+  lab [shape=note, style=filled, fillcolor="#FFFFFF", color="#2E7D32", fontcolor="#2E7D32", fontsize=10,
+       label="Flechas verdes: los servicios consultan a Usuarios\nPOST /api/v1/auth/validar (validar token)\nGET /api/v1/usuarios/{id}/contacto (Chat)"];
+  {rank=same; usu; lab}
+  usu -> lab [style=invis];
+  {rank=same; cat; bus; sol; pre; val; chat; alm}
+  {rank=same; dbc; dbs; dbp; dbv; dbch; dba}
+}
