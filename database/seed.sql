@@ -6,6 +6,7 @@
 -- Cuenta rápida para demostración: demo.bookshare / BookShare2026
 -- Requiere haber ejecutado antes database/schema.sql
 -- =====================================================================
+SET NAMES utf8mb4;
 USE bookshare_usuarios;
 
 SET FOREIGN_KEY_CHECKS = 0;

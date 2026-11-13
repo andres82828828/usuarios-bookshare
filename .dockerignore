@@ -1,0 +1,15 @@
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+tests
+evidencias
+docs
+docs-diagramas
+scripts
+seed.sql
+*.rar
+*.md
+Dockerfile
+docker-compose.yml

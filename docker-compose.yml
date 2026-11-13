@@ -1,0 +1,53 @@
+# BookShare · Microservicio de Usuarios + su base de datos MySQL propia
+# Uso:  docker compose up -d --build
+# Servicio en http://localhost:3001  (Swagger en /docs)
+services:
+  usuarios-db:
+    image: mysql:8.4
+    container_name: bookshare-usuarios-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${USUARIOS_DB_ROOT_PASSWORD:-rootBookShare2026}
+      MYSQL_DATABASE: bookshare_usuarios
+      MYSQL_USER: bookshare
+      MYSQL_PASSWORD: ${USUARIOS_DB_PASSWORD:-bookshare2026}
+      TZ: UTC
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      # Se ejecutan solo la primera vez (cuando el volumen está vacío): estructura + 40 usuarios ficticios
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - usuarios-db-data:/var/lib/mysql
+    healthcheck:
+      # Por TCP (127.0.0.1): así no da "healthy" durante la carga inicial, cuando MySQL aún no escucha en red
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -P 3306 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    # La base de datos NO se publica en el PC: solo el servicio de Usuarios la usa (database-per-service)
+
+  usuarios:
+    build: .
+    image: bookshare-usuarios:1.0.0
+    container_name: bookshare-usuarios
+    restart: unless-stopped
+    depends_on:
+      usuarios-db:
+        condition: service_healthy
+    environment:
+      PORT: 3001
+      DATA_STORE: mysql
+      DB_HOST: usuarios-db
+      DB_PORT: 3306
+      DB_USER: bookshare
+      DB_PASSWORD: ${USUARIOS_DB_PASSWORD:-bookshare2026}
+      DB_NAME: bookshare_usuarios
+      JWT_SECRET: ${JWT_SECRET:-cambiar-este-secreto-en-produccion}
+      JWT_EXPIRES_IN: 2h
+      DOMINIO_INSTITUCIONAL: uniminuto.edu.co
+    ports:
+      # puerto_del_PC:puerto_del_contenedor  -> los demás equipos llaman a http://IP_DEL_PC:3001
+      - "3001:3001"
+
+volumes:
+  usuarios-db-data:

@@ -2,6 +2,7 @@
 CREATE DATABASE IF NOT EXISTS bookshare_usuarios
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+SET NAMES utf8mb4;
 USE bookshare_usuarios;
 
 CREATE TABLE IF NOT EXISTS usuarios (

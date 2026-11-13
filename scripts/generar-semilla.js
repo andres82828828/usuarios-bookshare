@@ -85,6 +85,7 @@ const sql = `-- ================================================================
 -- Cuenta rápida para demostración: demo.bookshare / ${CONTRASENA_DEMO}
 -- Requiere haber ejecutado antes database/schema.sql
 -- =====================================================================
+SET NAMES utf8mb4;
 USE bookshare_usuarios;
 
 SET FOREIGN_KEY_CHECKS = 0;

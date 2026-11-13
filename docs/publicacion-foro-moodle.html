@@ -1,0 +1,277 @@
+<meta charset="utf-8">
+<h2 style="color:#1f4e79;">Servicio de Usuarios – BookShare</h2>
+<p><strong>Repositorio:</strong> <a href="https://github.com/andres82828828/usuarios-bookshare">https://github.com/andres82828828/usuarios-bookshare</a><br>
+<strong>Documentación interactiva (Swagger):</strong> <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">http://localhost:3001/docs</code> · <strong>Especificación OpenAPI:</strong> <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">http://localhost:3001/openapi.json</code></p>
+<hr>
+
+<h3 style="color:#1f4e79;border-bottom:2px solid #1f4e79;padding-bottom:4px;">1. Información del servicio</h3>
+<p><strong>Nombre del servicio:</strong> <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">usuarios-service</code> (Microservicio de Usuarios)</p>
+<p><strong>Funciones:</strong></p>
+<ul>
+<li>Registrar estudiantes con correo institucional (<code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">@uniminuto.edu.co</code>).</li>
+<li>Iniciar sesión y emitir tokens <strong>JWT</strong> (tipo Bearer, vigencia de 2 horas).</li>
+<li><strong>Validar tokens</strong> para que los demás servicios sepan si quien hace una petición es un usuario autenticado y activo.</li>
+<li>Consultar, actualizar y eliminar perfiles. La eliminación es lógica: la cuenta queda <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">INACTIVO</code>.</li>
+<li>Entregar los datos de contacto de un usuario (nombre, correo y teléfono) a los servicios que los necesiten.</li>
+</ul>
+<p><strong>Tecnología:</strong> Node.js + Express, con su propia base de datos MySQL (<code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">bookshare_usuarios</code>, patrón <em>database-per-service</em>).</p>
+<hr>
+
+<h3 style="color:#1f4e79;border-bottom:2px solid #1f4e79;padding-bottom:4px;">2. Interfaces y mecanismos de comunicación</h3>
+<p><strong>Mecanismo:</strong> API REST síncrona sobre HTTP con cuerpos JSON (<code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Content-Type: application/json</code>).</p>
+<p><strong>URL base:</strong> <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">http://localhost:3001/api/v1</code><br>
+<em>(En la integración se cambia <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">localhost</code> por la IP o el host donde quede desplegado el servicio. El puerto es 3001.)</em></p>
+<table class="table table-bordered table-sm" style="border-collapse:collapse;width:100%;margin-bottom:12px;">
+<thead><tr><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">#</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Método</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Endpoint</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Token</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Propósito / cuándo usarlo</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">1</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>POST</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">No</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Registrar un usuario nuevo (pantalla de registro).</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">2</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>POST</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/auth/login</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">No</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Iniciar sesión. Devuelve el token JWT que el frontend envía en todas las demás peticiones.</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">3</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>POST</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/auth/validar</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí (header o body)</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>Para los demás servicios:</strong> verificar que un token es válido y obtener el <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">usuario_id</code> de quien hace la petición.</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">4</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>GET</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios/{id}</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Consultar el perfil público de un usuario (por ejemplo, el dueño de un libro).</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">5</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>GET</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios/{id}/contacto</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Obtener nombre, correo y teléfono de un usuario (para Chat y Notificaciones).</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">6</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>PUT</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios/{id}</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí (solo el dueño)</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Actualizar el perfil propio: nombre, correo, teléfono o contraseña.</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">7</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>DELETE</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios/{id}</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí (solo el dueño)</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Eliminar la cuenta propia (eliminación lógica).</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">8</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>GET</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/health</code> (sin <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/api/v1</code>)</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">No</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Saber si el servicio y su base de datos están arriba (para monitoreo y el gateway).</td></tr>
+</tbody>
+</table>
+<p><strong>Autenticación:</strong> header <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Authorization: Bearer &lt;token&gt;</code>, con el token que devuelve el login.</p>
+<hr>
+
+<h3 style="color:#1f4e79;border-bottom:2px solid #1f4e79;padding-bottom:4px;">3. Datos de entrada y salida</h3>
+
+<h4>3.1 POST <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios</code>: Registrar usuario</h4>
+<table class="table table-bordered table-sm" style="border-collapse:collapse;width:100%;margin-bottom:12px;">
+<thead><tr><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Campo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Tipo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Obligatorio</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Regla</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">nombre_completo</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Entre 3 y 120 caracteres</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">correo</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Correo válido que termine en <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">@uniminuto.edu.co</code></td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">nombre_usuario</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">De 3 a 40 caracteres: letras, números, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">.</code>, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">-</code> o <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">_</code>. Es único</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">contrasena</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Mínimo 8 caracteres, con al menos una letra y un número</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">telefono</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">No</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">De 7 a 20 dígitos; puede empezar por <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">+</code></td></tr>
+</tbody>
+</table>
+<p><em>También se aceptan los nombres del contrato original: <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Nombre_Completo</code>, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Email</code>, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">NombreUsuario</code>, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Contraseña</code>, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Teléfono</code>.</em></p>
+<p><strong>Solicitud:</strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">POST /api/v1/usuarios
+Content-Type: application/json
+
+{
+  "nombre_completo": "Laura Gómez",
+  "correo": "laura.gomez@uniminuto.edu.co",
+  "nombre_usuario": "laura.gomez",
+  "contrasena": "Libros2026",
+  "telefono": "3001234567"
+}</pre>
+<p><strong>Respuesta exitosa: <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">201 Created</code></strong> (con el header <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Location: /api/v1/usuarios/41</code>)</p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">{
+  "mensaje": "Usuario registrado correctamente",
+  "usuario": {
+    "usuario_id": 41,
+    "nombre_completo": "Laura Gómez",
+    "correo": "laura.gomez@uniminuto.edu.co",
+    "nombre_usuario": "laura.gomez",
+    "telefono": "3001234567",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-11-09T15:20:00.000Z"
+  }
+}</pre>
+
+<h4>3.2 POST <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/auth/login</code>: Iniciar sesión</h4>
+<table class="table table-bordered table-sm" style="border-collapse:collapse;width:100%;margin-bottom:12px;">
+<thead><tr><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Campo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Tipo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Obligatorio</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">nombre_usuario</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">contrasena</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td></tr>
+</tbody>
+</table>
+<p><strong>Solicitud:</strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">POST /api/v1/auth/login
+Content-Type: application/json
+
+{ "nombre_usuario": "demo.bookshare", "contrasena": "BookShare2026" }</pre>
+<p><strong>Respuesta exitosa: <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">200 OK</code></strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "tipo": "Bearer",
+  "expira_en": "2h",
+  "usuario": {
+    "usuario_id": 1,
+    "nombre_completo": "Estudiante Demo BookShare",
+    "correo": "demo.bookshare@uniminuto.edu.co",
+    "nombre_usuario": "demo.bookshare",
+    "telefono": "3000000000",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-02-02T19:02:00.000Z"
+  }
+}</pre>
+
+<h4>3.3 POST <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/auth/validar</code>: Validar token (para los demás servicios)</h4>
+<p>El token se envía de una de estas dos formas:</p>
+<table class="table table-bordered table-sm" style="border-collapse:collapse;width:100%;margin-bottom:12px;">
+<thead><tr><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Dónde</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Campo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Tipo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Obligatorio</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Header</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Authorization: Bearer &lt;token&gt;</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Uno de los dos</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Body</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">token</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Uno de los dos</td></tr>
+</tbody>
+</table>
+<p>Además de revisar la firma y la vigencia del token, el servicio confirma en la base de datos que la cuenta sigue <strong>activa</strong>.</p>
+<p><strong>Solicitud:</strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">POST /api/v1/auth/validar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</pre>
+<p>o también:</p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">POST /api/v1/auth/validar
+Content-Type: application/json
+
+{ "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }</pre>
+<p><strong>Token válido: <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">200 OK</code></strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">{
+  "valido": true,
+  "usuario_id": 1,
+  "nombre_usuario": "demo.bookshare",
+  "expira": "2026-11-09T17:20:00.000Z"
+}</pre>
+<p><strong>Token inválido, vencido o de una cuenta eliminada: <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">401 Unauthorized</code></strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">{ "valido": false }</pre>
+
+<h4>3.4 GET <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios/{id}</code>: Consultar perfil</h4>
+<table class="table table-bordered table-sm" style="border-collapse:collapse;width:100%;margin-bottom:12px;">
+<thead><tr><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Parámetro</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Ubicación</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Tipo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Obligatorio</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">id</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">ruta</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">entero &gt; 0</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Authorization</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">header</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Bearer &lt;token&gt;</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Sí</td></tr>
+</tbody>
+</table>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">GET /api/v1/usuarios/1
+Authorization: Bearer &lt;token&gt;</pre>
+<p><strong>Respuesta exitosa: <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">200 OK</code></strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">{
+  "usuario": {
+    "usuario_id": 1,
+    "nombre_completo": "Estudiante Demo BookShare",
+    "correo": "demo.bookshare@uniminuto.edu.co",
+    "nombre_usuario": "demo.bookshare",
+    "telefono": "3000000000",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-02-02T19:02:00.000Z"
+  }
+}</pre>
+
+<h4>3.5 GET <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios/{id}/contacto</code>: Datos de contacto</h4>
+<p>Usa los mismos parámetros que 3.4.</p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">GET /api/v1/usuarios/1/contacto
+Authorization: Bearer &lt;token&gt;</pre>
+<p><strong>Respuesta exitosa: <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">200 OK</code></strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">{
+  "contacto": {
+    "usuario_id": 1,
+    "nombre_completo": "Estudiante Demo BookShare",
+    "correo": "demo.bookshare@uniminuto.edu.co",
+    "telefono": "3000000000"
+  }
+}</pre>
+
+<h4>3.6 PUT <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios/{id}</code>: Actualizar perfil (solo el dueño)</h4>
+<p>El <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">id</code> de la ruta debe ser el mismo usuario del token. Se envía <strong>al menos uno</strong> de estos campos:</p>
+<table class="table table-bordered table-sm" style="border-collapse:collapse;width:100%;margin-bottom:12px;">
+<thead><tr><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Campo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Tipo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Obligatorio</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Regla</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">nombre_completo</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">No</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Entre 3 y 120 caracteres</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">correo</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">No</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Correo institucional y único</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">telefono</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">No</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">De 7 a 20 dígitos</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">contrasena</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">string</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">No</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Mínimo 8 caracteres, con letra y número</td></tr>
+</tbody>
+</table>
+<p><em>El <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">nombre_usuario</code> <strong>no se puede modificar</strong>.</em></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">PUT /api/v1/usuarios/1
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{ "telefono": "3109876543" }</pre>
+<p><strong>Respuesta exitosa: <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">200 OK</code></strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">{
+  "mensaje": "Perfil actualizado correctamente",
+  "usuario": {
+    "usuario_id": 1,
+    "nombre_completo": "Estudiante Demo BookShare",
+    "correo": "demo.bookshare@uniminuto.edu.co",
+    "nombre_usuario": "demo.bookshare",
+    "telefono": "3109876543",
+    "estado": "ACTIVO",
+    "fecha_registro": "2026-02-02T19:02:00.000Z"
+  }
+}</pre>
+
+<h4>3.7 DELETE <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/usuarios/{id}</code>: Eliminar cuenta (solo el dueño)</h4>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">DELETE /api/v1/usuarios/1
+Authorization: Bearer &lt;token&gt;</pre>
+<p><strong>Respuesta exitosa: <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">200 OK</code></strong></p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">{ "mensaje": "Cuenta eliminada correctamente" }</pre>
+<p>Después de eliminarla, el usuario no puede iniciar sesión, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/auth/validar</code> responde <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">valido: false</code> y los GET de ese usuario responden 404.</p>
+
+<h4>3.8 GET <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">/health</code></h4>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">GET /health</pre>
+<p><strong><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">200 OK</code>:</strong> <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">{ "servicio": "usuarios", "estado": "OK", "base_de_datos": "OK" }</code><br>
+<strong><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">503</code>:</strong> <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">{ "servicio": "usuarios", "estado": "DEGRADADO", "base_de_datos": "NO_DISPONIBLE" }</code></p>
+<hr>
+
+<h3 style="color:#1f4e79;border-bottom:2px solid #1f4e79;padding-bottom:4px;">4. Manejo de errores</h3>
+<p>Todos los errores tienen el mismo formato:</p>
+<pre style="background:#f4f4f4;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">{
+  "error": {
+    "codigo": "DATOS_INVALIDOS",
+    "mensaje": "Los datos enviados no son válidos",
+    "detalles": [
+      { "campo": "correo", "mensaje": "Debe ser un correo institucional (@uniminuto.edu.co)" }
+    ]
+  }
+}</pre>
+<p><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">detalles</code> solo aparece en los errores de validación. Para decidir qué hacer, lean el campo <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">codigo</code>; el texto de <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">mensaje</code> puede cambiar.</p>
+<table class="table table-bordered table-sm" style="border-collapse:collapse;width:100%;margin-bottom:12px;">
+<thead><tr><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">HTTP</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">codigo</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Cuándo ocurre</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Endpoints</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">400</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">DATOS_INVALIDOS</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Faltan campos, tienen un formato incorrecto, el <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">id</code> no es un entero positivo o se intenta cambiar el <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">nombre_usuario</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">1, 2, 4, 5, 6, 7</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">400</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">JSON_INVALIDO</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">El cuerpo no es un JSON válido</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Todos los que reciben body</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">401</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">CREDENCIALES_INVALIDAS</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">El usuario o la contraseña son incorrectos</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">2</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">401</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">TOKEN_AUSENTE</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">No se envió el header <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Authorization: Bearer &lt;token&gt;</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">3, 4, 5, 6, 7</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">401</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">TOKEN_INVALIDO</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">El token está alterado o vencido</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">4, 5, 6, 7</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">401</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><em>(cuerpo <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">{ "valido": false }</code>)</em></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">El token es inválido, está vencido o la cuenta está inactiva</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">3</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">403</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">ACCESO_DENEGADO</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Se intenta modificar o eliminar un usuario distinto al del token</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">6, 7</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">403</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">CUENTA_INACTIVA</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Login de una cuenta eliminada</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">2</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">404</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">USUARIO_NO_ENCONTRADO</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">El usuario no existe o está inactivo</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">4, 5, 6, 7</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">404</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">RUTA_NO_ENCONTRADA</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">El endpoint no existe</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Cualquiera</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">409</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">USUARIO_DUPLICADO</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">El correo o el nombre de usuario ya están registrados</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">1, 6</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">503</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">SERVICIO_NO_DISPONIBLE</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">La base de datos de Usuarios no responde. Se puede reintentar más tarde</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Todos</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">500</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">ERROR_INTERNO</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Error inesperado</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Todos</td></tr>
+</tbody>
+</table>
+<hr>
+
+<h3 style="color:#1f4e79;border-bottom:2px solid #1f4e79;padding-bottom:4px;">5. Integración con otros servicios</h3>
+<table class="table table-bordered table-sm" style="border-collapse:collapse;width:100%;margin-bottom:12px;">
+<thead><tr><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Servicio consumidor</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Operaciones que usa</th><th style="border:1px solid #999;padding:6px 8px;background:#1f4e79;color:#ffffff;text-align:left;">Para qué</th></tr></thead>
+<tbody>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>Frontend / API Gateway</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">POST /usuarios</code>, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">POST /auth/login</code>, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">GET/PUT/DELETE /usuarios/{id}</code>, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">GET /health</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Registro, login, pantalla de perfil y monitoreo</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>Todos los servicios con endpoints protegidos</strong> (Libros/Catálogo, Préstamos/Intercambios, Chat, Notificaciones)</td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">POST /auth/validar</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Confirmar que el token que reciben es válido y obtener el <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">usuario_id</code> de quien hace la petición</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>Libros / Catálogo</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">GET /usuarios/{id}</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Mostrar los datos del dueño de una publicación</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>Préstamos / Intercambios</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">GET /usuarios/{id}</code>, <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">GET /usuarios/{id}/contacto</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Verificar que las partes existen y están activas, y obtener su contacto</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>Chat</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">GET /usuarios/{id}/contacto</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Mostrar el nombre del otro participante</td></tr>
+<tr><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><strong>Notificaciones</strong></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;"><code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">GET /usuarios/{id}/contacto</code></td><td style="border:1px solid #bbb;padding:6px 8px;vertical-align:top;">Obtener el correo o el teléfono al que se envía la notificación</td></tr>
+</tbody>
+</table>
+<p><strong>Flujo recomendado para los demás servicios:</strong></p>
+<ol>
+<li>El frontend hace el login en Usuarios y recibe el token.</li>
+<li>El frontend llama a su servicio con <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">Authorization: Bearer &lt;token&gt;</code>.</li>
+<li>Su servicio reenvía ese token a <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">POST /api/v1/auth/validar</code>.</li>
+<li>Si recibe <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">200</code> y <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">valido: true</code>, usa el <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">usuario_id</code> de la respuesta. Si recibe <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">401</code>, rechaza la petición con 401.</li>
+</ol>
+<p>Así nadie tiene que conocer el secreto del JWT ni acceder a nuestra base de datos.</p>
+<p><strong>Datos de prueba:</strong> hay 40 usuarios ficticios cargados. La cuenta de demostración es <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">demo.bookshare</code> con contraseña <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">BookShare2026</code>, y todas las cuentas ficticias usan esa misma contraseña. El servicio también puede correr sin MySQL con <code style="background:#eef1f5;color:#c7254e;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;">npm run start:memoria</code>.</p>
+<hr>
+
+<h3 style="color:#1f4e79;border-bottom:2px solid #1f4e79;padding-bottom:4px;">6. Comunicación y colaboración</h3>
+<ul>
+<li>Si necesitan algún dato, endpoint o ajuste, escríbannos en los comentarios de esta publicación.</li>
+<li>Si cambiamos algún endpoint, parámetro o estructura, actualizaremos esta publicación y avisaremos a los servicios afectados.</li>
+<li><strong>A los demás equipos:</strong> confírmennos qué operaciones van a consumir y si necesitan algún campo adicional del usuario (por ejemplo, programa académico o sede). Así podemos agregarlo sin romper el contrato actual.</li>
+</ul>

@@ -37,6 +37,19 @@ El servicio queda en `http://localhost:3001`.
 **Documentación interactiva (Swagger):** http://localhost:3001/docs  (especificación en `/openapi.json`).
 Ahí se pueden probar todos los endpoints: registrar, hacer login, copiar el token, presionar **Authorize** y usar los endpoints protegidos.
 
+## Ejecutar con Docker
+Requiere Docker Desktop encendido. Levanta el servicio y su propia base de datos MySQL (con los 40 usuarios ficticios):
+```bash
+docker compose up -d --build     # construir y levantar
+docker compose ps                # ver estado (ambos deben quedar "healthy")
+docker compose logs -f usuarios  # ver logs del servicio
+docker compose down              # detener (los datos se conservan)
+docker compose down -v           # detener y borrar la base de datos (se recarga la semilla al volver a subir)
+```
+- El servicio queda publicado en el puerto **3001** del PC: `http://localhost:3001` (o `http://IP_DEL_PC:3001` desde otros equipos).
+- La base de datos solo es accesible por el contenedor del servicio (no se publica en el PC).
+- Contraseñas y secreto JWT se pueden cambiar con las variables `USUARIOS_DB_PASSWORD`, `USUARIOS_DB_ROOT_PASSWORD` y `JWT_SECRET`.
+
 ## Pruebas
 ```bash
 npm test                         # 30 pruebas automáticas (Jest + Supertest)
