@@ -1,7 +1,7 @@
 # Servicio de Usuarios – BookShare
 
 Repositorio: https://github.com/andres82828828/usuarios-bookshare
-Documentación interactiva (Swagger): `http://localhost:3001/docs` · Especificación OpenAPI: `http://localhost:3001/openapi.json`
+Documentación interactiva (Swagger): `https://finished-backrest-condition.ngrok-free.dev/docs` · Especificación OpenAPI: `https://finished-backrest-condition.ngrok-free.dev/openapi.json`
 
 ---
 
@@ -25,8 +25,8 @@ Tecnología: Node.js + Express, con su propia base de datos MySQL (`bookshare_us
 
 **Mecanismo:** API REST síncrona sobre HTTP con cuerpos JSON (`Content-Type: application/json`).
 
-**URL base:** `http://localhost:3001/api/v1`
-(En la integración se cambia `localhost` por la IP o el host donde quede desplegado el servicio. El puerto es 3001.)
+**URL base:** `https://finished-backrest-condition.ngrok-free.dev/api/v1`
+(Publicado con Docker + ngrok desde el PC del equipo de Usuarios. Para pruebas locales: `http://localhost:3001/api/v1`.)
 
 | # | Método | Endpoint | Token | Propósito / cuándo usarlo |
 |---|---|---|---|---|
